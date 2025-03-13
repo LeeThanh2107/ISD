@@ -27,20 +27,17 @@ public class AuthController {
     @PostMapping
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         // Lấy user từ database
-        String fixedPassword = passwordEncoder.encode("admin@123123");
         Optional<User> user = userService.findByUsername(loginRequest.getUsername());
         if (user.isEmpty() || !passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sai tài khoản hoặc mật khẩu!");
         }
 
         // Tạo JWT token
-        String token = JwtService.generateToken(user.get().getUsername());
+        String token = JwtService.generateToken(user.get().getUsername(),user.get().getRole().name());
 
         // Trả về response
         Map<String, String> response = new HashMap<>();
         response.put("token", token);
-        response.put("role", user.get().getRole().name()); // Giả sử User có thuộc tính `role`
-
         return ResponseEntity.ok(response);
     }
 
