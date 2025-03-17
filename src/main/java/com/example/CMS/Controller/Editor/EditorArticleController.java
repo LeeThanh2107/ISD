@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/editor/article")
-public class ArticleController {
+public class EditorArticleController {
 
     @Autowired
     ArticleService articleService;
@@ -44,7 +44,7 @@ public class ArticleController {
     @PostMapping("/review")
     public ResponseEntity<?> update(@RequestBody Reviews reviews){
         try{
-//            reviewsService.review(reviews);
+//            reviewsService.update(reviews);
             return ResponseUtils.success("Edited successfully!");
         }catch(Exception e){
             return ResponseUtils.error(HttpStatus.INTERNAL_SERVER_ERROR,"Something bad happened!");
