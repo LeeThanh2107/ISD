@@ -1,6 +1,7 @@
 package com.example.CMS.Model;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,7 +15,8 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(() -> user.getRole().name()); // Chuyển Enum role thành quyền
+        String authority = user.getRole().name();
+        return Collections.singleton(new SimpleGrantedAuthority(authority));
     }
 
     @Override
@@ -42,4 +44,7 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 
+    public User getUser() {
+        return this.user;
+    }
 }
