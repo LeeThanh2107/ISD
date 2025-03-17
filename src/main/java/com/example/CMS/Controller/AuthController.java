@@ -6,13 +6,14 @@ import com.example.CMS.Services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping("/login")
 public class AuthController {
 
@@ -27,6 +28,7 @@ public class AuthController {
     @PostMapping
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         // Lấy user từ database
+        System.out.println(loginRequest);
         Optional<User> user = userService.findByUsername(loginRequest.getUsername());
         if (user.isEmpty() || !passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sai tài khoản hoặc mật khẩu!");
@@ -34,7 +36,7 @@ public class AuthController {
 
         // Tạo JWT token
         String token = JwtService.generateToken(user.get().getUsername(),user.get().getRole().name());
-
+        System.out.println("Authentication: "+token);
         // Trả về response
         Map<String, String> response = new HashMap<>();
         response.put("token", token);
