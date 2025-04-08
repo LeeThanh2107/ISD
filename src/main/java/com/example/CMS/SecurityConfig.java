@@ -32,6 +32,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // Tắt CSRF nếu dùng API
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login").permitAll()
+                        .requestMatchers("/reset-password").permitAll()
                         .requestMatchers("/admin/**").hasAuthority("ADMIN") // ADMIN mới truy cập được
                         .requestMatchers("/writer/**").hasAuthority("WRITER") // USER mới truy cập được
                         .requestMatchers("/editor/**").hasAuthority("EDITOR")  // Ai cũng truy cập được
@@ -46,8 +47,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 //        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // Allow frontend origin (local)
-//        configuration.setAllowedOrigins(List.of("https://cms-lyluanchinhtri-dev.up.railway.app")); // Allow frontend origin (develop)
-        configuration.setAllowedOrigins(List.of("https://cms-lyluanchinhtri.up.railway.app")); // Allow frontend origin (product)
+        configuration.setAllowedOrigins(List.of("https://cms-lyluanchinhtri-dev.up.railway.app")); // Allow frontend origin (develop)
+//        configuration.setAllowedOrigins(List.of("https://cms-lyluanchinhtri.up.railway.app")); // Allow frontend origin (product)
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);

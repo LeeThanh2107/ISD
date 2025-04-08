@@ -29,6 +29,9 @@ public class UserService {
     public void store(User user){
         userRepository.save(user);
     }
+    public void resetPassword(User user){
+        userRepository.save(user);
+    }
     public void delete(Long id){
         userRepository.deleteById(id);
     }
