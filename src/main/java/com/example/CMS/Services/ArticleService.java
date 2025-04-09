@@ -1,5 +1,6 @@
 package com.example.CMS.Services;
 
+import com.example.CMS.DTO.ArticleDto;
 import com.example.CMS.Model.Article;
 import com.example.CMS.Model.CustomUserDetails;
 import com.example.CMS.Model.User;
@@ -11,14 +12,23 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ArticleService {
     @Autowired
     ArticleRepository articleRepository;
 
-    public List<Article> index(){
-        return articleRepository.findAll();
+    public List<ArticleDto> getAllArticles() {
+        List<Article> articles = articleRepository.findAll();
+
+        return articles.stream().map(article -> new ArticleDto(
+                article.getArticleID(),
+                article.getTitle(),
+                article.getAbstract(),
+                article.getContent(),
+                article.getUser() != null ? article.getUser().getName() : null
+        )).collect(Collectors.toList());
     }
 
     public Article detail(Long id){
