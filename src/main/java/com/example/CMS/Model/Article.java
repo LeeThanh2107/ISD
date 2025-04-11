@@ -20,7 +20,7 @@ public class Article {
     @Column(nullable = false)
     private String Abstract;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "MEDIUMTEXT")
     private String Content;
 
     @Column(nullable = false)
