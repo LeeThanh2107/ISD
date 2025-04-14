@@ -1,8 +1,7 @@
 package com.example.CMS.Model;
 
+import com.example.CMS.Common.GlobalConstants.Status;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 
 import java.time.LocalDateTime;
 
@@ -24,9 +23,8 @@ public class Article {
     private String Content;
 
     @Column(nullable = false)
-    @Min(value = 0)
-    @Max(value = 4)
-    private int status;
+    @Enumerated(EnumType.ORDINAL)
+    private Status status;
     @Column
     private LocalDateTime CreatedAt;
     @Column
@@ -68,7 +66,7 @@ public class Article {
         Content = content;
     }
 
-    public int getStatus() {
+    public Status getStatus() {
         return status;
     }
 
@@ -80,7 +78,7 @@ public class Article {
         return UpdatedAt;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
     public void setCreatedAt(LocalDateTime createdAt) {
