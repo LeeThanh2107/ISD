@@ -35,7 +35,6 @@ public class EditorArticleController {
     @PostMapping("/detail")
     public ResponseEntity<?> detail(@RequestBody IdRequest request){
         try{
-            System.out.println(request.getId());
             ArticleDto data = articleService.detail(request.getId());
             return ResponseUtils.success(data);
         }catch(Exception e) {
@@ -43,10 +42,11 @@ public class EditorArticleController {
         }
     }
     @PostMapping("/review")
-    public ResponseEntity<?> update(@RequestBody Reviews reviews){
+    public ResponseEntity<?> update(@RequestBody ReviewRequest reviewRequest){
         try{
-//            reviewsService.update(reviews);
-            return ResponseUtils.success("Edited successfully!");
+            articleService.update(reviewRequest.getArticle(),reviewRequest.getId());
+          String result = reviewsService.create(reviewRequest.getArticle(),reviewRequest.getComments());
+            return ResponseUtils.success(result);
         }catch(Exception e){
             return ResponseUtils.error(HttpStatus.INTERNAL_SERVER_ERROR,"Something bad happened!");
         }
@@ -61,6 +61,35 @@ public class EditorArticleController {
 
         public void setId(String id) {
             this.id = id;
+        }
+    }
+    public static class ReviewRequest{
+        private Article article;
+        private String comments;
+        private String id;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public Article getArticle() {
+            return article;
+        }
+
+        public void setArticle(Article article) {
+            this.article = article;
+        }
+
+        public String getComments() {
+            return comments;
+        }
+
+        public void setComments(String comments) {
+            this.comments = comments;
         }
     }
 

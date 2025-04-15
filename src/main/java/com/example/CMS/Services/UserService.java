@@ -1,8 +1,11 @@
 package com.example.CMS.Services;
 
+import com.example.CMS.Model.CustomUserDetails;
 import com.example.CMS.Model.User;
 import com.example.CMS.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,6 +34,7 @@ public class UserService {
     }
     public void resetPassword(User user){
         userRepository.save(user);
+
     }
     public void delete(Long id){
         userRepository.deleteById(id);

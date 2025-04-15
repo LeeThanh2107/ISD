@@ -32,7 +32,6 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // Tắt CSRF nếu dùng API
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login").permitAll()
-                        .requestMatchers("/reset-password").permitAll()
                         .requestMatchers("/admin/**").hasAuthority("ADMIN") // ADMIN mới truy cập được
                         .requestMatchers("/writer/**").hasAuthority("WRITER") // USER mới truy cập được
                         .requestMatchers("/editor/**").hasAuthority("EDITOR")  // Ai cũng truy cập được

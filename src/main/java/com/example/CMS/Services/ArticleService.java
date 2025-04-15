@@ -22,7 +22,7 @@ public class ArticleService {
     ArticleRepository articleRepository;
 
     public List<ArticleDto> getAllArticles() {
-        List<Article> articles = articleRepository.findAll();
+        List<Article> articles = articleRepository.getByStatus(Status.DRAFT);
 
         return articles.stream().map(article -> {
             try {
@@ -57,8 +57,29 @@ public class ArticleService {
                 article.getCreatedAt()
         );
     }
-    public void update(Article article){
-        articleRepository.save(article);
+    public void update(Article article, String id) throws Exception {
+        Long articleId = IdEncryptor.decrypt(id);
+        Article existedArticle = articleRepository.getReferenceById(articleId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof CustomUserDetails) {
+                User user = ((CustomUserDetails) principal).getUser(); // Giả sử getUser() trả về User
+                existedArticle.setUser(user);
+            }
+        } else {
+            throw new SecurityException("No authenticated user found");
+        }
+        existedArticle.setTitle(article.getTitle());
+        existedArticle.setAbstract(article.getAbstract());
+        existedArticle.setContent(article.getContent());
+        existedArticle.setUpdatedAt(LocalDateTime.now());
+        if(article.getStatus() == Status.valueOf("PUBLISHED")){
+            existedArticle.setStatus(Status.PUBLISHED);
+        }else if(article.getStatus() == Status.valueOf("REJECTED")){
+            existedArticle.setStatus(Status.REJECTED);
+        }
+        articleRepository.save(existedArticle);
     }
     public void delete(Long id){
         articleRepository.deleteById(id);

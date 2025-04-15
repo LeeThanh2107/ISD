@@ -43,11 +43,11 @@ public class IdEncryptor {
         System.arraycopy(iv, 0, ivAndEncrypted, 0, iv.length);
         System.arraycopy(encrypted, 0, ivAndEncrypted, iv.length, encrypted.length);
 
-        return Base64.getEncoder().encodeToString(ivAndEncrypted);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(ivAndEncrypted);
     }
 
     public static Long decrypt(String encryptedId) throws Exception {
-        byte[] ivAndEncrypted = Base64.getDecoder().decode(encryptedId);
+        byte[] ivAndEncrypted = Base64.getUrlDecoder().decode(encryptedId);
         System.out.println("a"+encryptedId);
         // Extract IV and encrypted data
         byte[] iv = new byte[16];

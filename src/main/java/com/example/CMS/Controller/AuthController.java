@@ -1,11 +1,14 @@
 package com.example.CMS.Controller;
 
 import com.example.CMS.Common.ResponseUtils;
+import com.example.CMS.Model.CustomUserDetails;
 import com.example.CMS.Model.User;
 import com.example.CMS.Services.JwtService;
 import com.example.CMS.Services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -45,13 +48,15 @@ public class AuthController {
     }
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody LoginRequest loginRequest) {
-        Optional<User> user = userService.findByUsername(loginRequest.getUsername());
-        if (user.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Không tìm thấy tài khoản!");
-        }
+
         try {
-            user.get().setPassword(this.passwordEncoder.encode(loginRequest.getPassword()));
-            userService.resetPassword(user.get());
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof CustomUserDetails) {
+                User user = ((CustomUserDetails) principal).getUser(); // Giả sử getUser() trả về User
+                user.setPassword(this.passwordEncoder.encode(loginRequest.getPassword()));
+                userService.resetPassword(user);
+            }
             return ResponseUtils.success("Change password successfully");
         }catch(Exception e){
             return ResponseUtils.error(HttpStatus.INTERNAL_SERVER_ERROR,"Something bad happened!");
