@@ -30,9 +30,10 @@ public class User {
     private Role role;
 
 
-    @OneToMany(mappedBy = "user")
-    private List<Article> articleList;
-
+    @OneToMany(mappedBy = "writer")
+    private List<Article> writerArticleList;
+    @OneToMany(mappedBy = "editor")
+    private List<Article> editorArticleList;
     public Long getUserId() {
         return UserId;
     }
@@ -81,14 +82,19 @@ public class User {
         this.role = role;
     }
 
-    public List<Article> getArticleList() {
-        return articleList;
+    public List<Article> getWriterArticleList() {
+        return writerArticleList;
     }
 
-    public void setArticleList(List<Article> articleList) {
-        this.articleList = articleList;
+    public void setWriterArticleList(List<Article> writerArticleList) {
+        this.writerArticleList = writerArticleList;
     }
 
+    public List<Article> getEditorArticleList() {
+        return editorArticleList;
+    }
 
-
+    public void setEditorArticleList(List<Article> editorArticleList) {
+        this.editorArticleList = editorArticleList;
+    }
 }

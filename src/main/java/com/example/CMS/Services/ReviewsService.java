@@ -25,7 +25,7 @@ public class ReviewsService{
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             Object principal = authentication.getPrincipal();
             if (principal instanceof CustomUserDetails) {
-                User user = ((CustomUserDetails) principal).getUser(); // Giả sử getUser() trả về User
+                User user = ((CustomUserDetails) principal).getUser(); // Giả sử getWriter() trả về User
                 reviews.setUser(user);
             }
             reviews.setArticle(article);

@@ -1,13 +1,15 @@
+// Article.java
 package com.example.CMS.Model;
 
 import com.example.CMS.Common.GlobalConstants.Status;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Article")
-
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,14 +27,45 @@ public class Article {
     @Column(nullable = false)
     @Enumerated(EnumType.ORDINAL)
     private Status status;
+
     @Column
-    private LocalDateTime CreatedAt;
+    private LocalDateTime createdAt;
+
     @Column
     private LocalDateTime UpdatedAt;
 
+    @Column
+    private LocalDateTime sendToEditorAt;
+
+    @Column
+    private LocalDateTime publishedAt;
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Views> views = new ArrayList<>();
+
     @ManyToOne
-    @JoinColumn(name="UserId", nullable = false)
-    private User user;
+    @JoinColumn(name = "writer_id", nullable = false)
+    private User writer;
+
+    @ManyToOne
+    @JoinColumn(name = "editor_id", nullable = true)
+    private User editor;
+
+    public LocalDateTime getSendToEditorAt() {
+        return sendToEditorAt;
+    }
+
+    public void setSendToEditorAt(LocalDateTime sendToEditorAt) {
+        this.sendToEditorAt = sendToEditorAt;
+    }
+
+    public LocalDateTime getPublishedAt() {
+        return publishedAt;
+    }
+
+    public void setPublishedAt(LocalDateTime publishedAt) {
+        this.publishedAt = publishedAt;
+    }
 
     public Long getArticleID() {
         return ArticleID;
@@ -54,6 +87,26 @@ public class Article {
         return Abstract;
     }
 
+    public List<Views> getViews() {
+        return views;
+    }
+
+    public void setViews(List<Views> views) {
+        this.views = views;
+    }
+
+    // Helper method to add a view record
+    public void addView(Views view) {
+        views.add(view);
+        view.setArticle(this);
+    }
+
+    // Helper method to remove a view record
+    public void removeView(Views view) {
+        views.remove(view);
+        view.setArticle(null);
+    }
+
     public void setAbstract(String anAbstract) {
         Abstract = anAbstract;
     }
@@ -71,7 +124,7 @@ public class Article {
     }
 
     public LocalDateTime getCreatedAt() {
-        return CreatedAt;
+        return createdAt;
     }
 
     public LocalDateTime getUpdatedAt() {
@@ -81,18 +134,28 @@ public class Article {
     public void setStatus(Status status) {
         this.status = status;
     }
+
     public void setCreatedAt(LocalDateTime createdAt) {
-        CreatedAt = createdAt;
+        this.createdAt = createdAt;
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         UpdatedAt = updatedAt;
     }
-    public User getUser() {
-        return user;
+
+    public User getWriter() {
+        return writer;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setWriter(User writer) {
+        this.writer = writer;
+    }
+
+    public User getEditor() {
+        return editor;
+    }
+
+    public void setEditor(User editor) {
+        this.editor = editor;
     }
 }

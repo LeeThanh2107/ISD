@@ -56,7 +56,6 @@ public class UserController {
     public ResponseEntity<?> store(@RequestBody User user){
         try{
             String rawPassword = generateRandomPassword(10);
-
             // Mã hóa mật khẩu trước khi lưu vào database
             String encodedPassword = passwordEncoder.encode(rawPassword);
             user.setPassword(encodedPassword); // Giả sử User có phương thức setPassword()

@@ -53,7 +53,7 @@ public class AuthController {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             Object principal = authentication.getPrincipal();
             if (principal instanceof CustomUserDetails) {
-                User user = ((CustomUserDetails) principal).getUser(); // Giả sử getUser() trả về User
+                User user = ((CustomUserDetails) principal).getUser(); // Giả sử getWriter() trả về User
                 user.setPassword(this.passwordEncoder.encode(loginRequest.getPassword()));
                 userService.resetPassword(user);
             }

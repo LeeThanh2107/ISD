@@ -1,10 +1,10 @@
 package com.example.CMS.Controller.Editor;
 
+import com.example.CMS.Common.GlobalConstants.Status;
 import com.example.CMS.Common.ResponseUtils;
 import com.example.CMS.DTO.ArticleDto;
 import com.example.CMS.Model.Article;
-import com.example.CMS.Model.Reviews;
-import com.example.CMS.Services.ArticleService;
+import com.example.CMS.Services.Editor.EditorArticleService;
 import com.example.CMS.Services.ReviewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ import java.util.List;
 public class EditorArticleController {
 
     @Autowired
-    ArticleService articleService;
+    EditorArticleService articleService;
 
     @Autowired
     ReviewsService reviewsService;
@@ -53,10 +53,18 @@ public class EditorArticleController {
     }
     public static class IdRequest {
         private String id;
-
+        private Status status;
         // Getters and setters
         public String getId() {
             return id;
+        }
+
+        public Status getStatus() {
+            return status;
+        }
+
+        public void setStatus(Status status) {
+            this.status = status;
         }
 
         public void setId(String id) {
