@@ -128,15 +128,26 @@ public class WriterArticleService {
 
     public void sendToEditor(Article article){
         User user = getUser();
-        Article draft = articleRepository.getReferenceById(article.getArticleID());
-
-        draft.setWriter(user);
-        draft.setTitle(article.getTitle());
-        draft.setAbstract(article.getAbstract());
-        draft.setContent(article.getContent());
-        draft.setSendToEditorAt(LocalDateTime.now());
-        draft.setStatus(Status.REQUEST_REVIEW);
-
-        articleRepository.save(draft);
+        if(article.getArticleID() != null){
+            Optional<Article> draft = articleRepository.findById(article.getArticleID());
+            if(draft.isPresent()){
+                draft.get().setWriter(user);
+                draft.get().setTitle(article.getTitle());
+                draft.get().setAbstract(article.getAbstract());
+                draft.get().setContent(article.getContent());
+                draft.get().setSendToEditorAt(LocalDateTime.now());
+                draft.get().setStatus(Status.REQUEST_REVIEW);
+                articleRepository.save(draft.get());
+            }
+        }else{
+            Article newArticle = new Article();
+            newArticle.setWriter(user);
+            newArticle.setTitle(article.getTitle());
+            newArticle.setAbstract(article.getAbstract());
+            newArticle.setContent(article.getContent());
+            newArticle.setSendToEditorAt(LocalDateTime.now());
+            newArticle.setStatus(Status.REQUEST_REVIEW);
+            articleRepository.save(newArticle);
+        }
     }
 }
