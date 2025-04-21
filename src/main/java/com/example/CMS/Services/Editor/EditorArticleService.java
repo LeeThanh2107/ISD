@@ -8,7 +8,6 @@ import com.example.CMS.DTO.ArticleDto;
 import com.example.CMS.Model.Article;
 import com.example.CMS.Model.CustomUserDetails;
 import com.example.CMS.Model.User;
-import com.example.CMS.Model.Views;
 import com.example.CMS.Repository.ArticleRepository;
 import com.example.CMS.Repository.ViewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +15,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.View;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import static com.example.CMS.Common.ConvertToDTO.convertToDto;
 
@@ -32,7 +28,7 @@ public class EditorArticleService {
     @Autowired
     private ViewsRepository viewsRepository;
     public List<ArticleDto> getAllArticles() {
-        List<Article> articles = articleRepository.findAll();
+        List<Article> articles = articleRepository.findAllByStatusNot(Status.DRAFT);
 
         return articles.stream()
                 .map(ConvertToDTO::convertToDto)
