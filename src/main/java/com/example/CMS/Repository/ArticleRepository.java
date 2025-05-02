@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface ArticleRepository extends JpaRepository<Article,Long> {
     public List<Article> getByStatus(Status status);
     public List<Article> findAllByStatusNot(Status status);
+    public List<Article> findAllByStatus(Status status);
     public List<Article> getByWriter(User user);
     public Optional<Article> findTopByWriterAndStatusOrderByCreatedAtDesc(User user, Status status);
 

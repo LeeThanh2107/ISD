@@ -2,6 +2,7 @@ package com.example.CMS.Services.Admin;
 
 import com.example.CMS.Common.ConvertToDTO;
 import com.example.CMS.Common.GlobalConstants.Status;
+import com.example.CMS.Common.IdEncryptor;
 import com.example.CMS.DTO.ArticleDto;
 import com.example.CMS.DTO.ViewsDto;
 import com.example.CMS.Model.Article;
@@ -32,7 +33,7 @@ public class AdminArticleService {
     );
 
     public List<ArticleDto> index() {
-        return articleRepository.findAllByStatusNot(Status.DRAFT).stream()
+        return articleRepository.findAllByStatus(Status.PUBLISHED).stream()
                 .map(ConvertToDTO::convertToDto)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
@@ -48,8 +49,9 @@ public class AdminArticleService {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
-    public ArticleDto detail(Long id){
-        Article article = articleRepository.getReferenceById(id);
+    public ArticleDto detail(String id) throws Exception {
+        Long decryptedId = IdEncryptor.decrypt(id);
+        Article article = articleRepository.getReferenceById(decryptedId);
         return convertToDto(article);
     }
     // Cleanly shutdown thread pool

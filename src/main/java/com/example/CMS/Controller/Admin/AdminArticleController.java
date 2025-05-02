@@ -28,7 +28,7 @@ public class AdminArticleController {
         }
     }
     @PostMapping("/detail/{id}")
-    public ResponseEntity<?>detail(@PathVariable Long id){
+    public ResponseEntity<?>detail(@PathVariable String id){
             try{
                 ArticleDto article = adminArticleService.detail(id);
                 return ResponseUtils.success(article);
