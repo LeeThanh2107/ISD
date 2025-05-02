@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -103,7 +104,7 @@ public class WriterArticleService {
         existedArticle.setTitle(article.getTitle());
         existedArticle.setAbstract(article.getAbstract());
         existedArticle.setContent(article.getContent());
-        existedArticle.setUpdatedAt(LocalDateTime.now());
+        existedArticle.setUpdatedAt(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")));
 
         if(article.getStatus() == Status.REQUEST_REVIEW){
             existedArticle.setStatus(Status.REQUEST_REVIEW);
@@ -121,7 +122,7 @@ public class WriterArticleService {
     public void saveDraft(Article article){
         User user = getUser();
         article.setWriter(user);
-        article.setCreatedAt(LocalDateTime.now());
+        article.setCreatedAt(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")));
         article.setStatus(Status.DRAFT);
         articleRepository.save(article);
     }
@@ -135,7 +136,7 @@ public class WriterArticleService {
                 draft.get().setTitle(article.getTitle());
                 draft.get().setAbstract(article.getAbstract());
                 draft.get().setContent(article.getContent());
-                draft.get().setSendToEditorAt(LocalDateTime.now());
+                draft.get().setSendToEditorAt(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")));
                 draft.get().setStatus(Status.REQUEST_REVIEW);
                 articleRepository.save(draft.get());
             }
@@ -145,8 +146,8 @@ public class WriterArticleService {
             newArticle.setTitle(article.getTitle());
             newArticle.setAbstract(article.getAbstract());
             newArticle.setContent(article.getContent());
-            newArticle.setCreatedAt(LocalDateTime.now());
-            newArticle.setSendToEditorAt(LocalDateTime.now());
+            newArticle.setCreatedAt(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")));
+            newArticle.setSendToEditorAt(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")));
             newArticle.setStatus(Status.REQUEST_REVIEW);
             articleRepository.save(newArticle);
         }

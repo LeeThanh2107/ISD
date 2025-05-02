@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 import static com.example.CMS.Common.ConvertToDTO.convertToDto;
@@ -61,10 +62,10 @@ public class EditorArticleService {
         existedArticle.setAbstract(article.getAbstract());
         existedArticle.setCreatedAt(article.getCreatedAt());
         existedArticle.setContent(article.getContent());
-        existedArticle.setUpdatedAt(LocalDateTime.now());
+        existedArticle.setUpdatedAt(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")));
         if (article.getStatus() == Status.PUBLISHED) {
             existedArticle.setStatus(Status.PUBLISHED);
-            existedArticle.setPublishedAt(LocalDateTime.now());
+            existedArticle.setPublishedAt(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")));
         } else if (article.getStatus() == Status.REJECTED) {
             existedArticle.setStatus(Status.REJECTED);
         }
