@@ -60,7 +60,6 @@ public class EditorArticleService {
         }
         existedArticle.setTitle(article.getTitle());
         existedArticle.setAbstract(article.getAbstract());
-        existedArticle.setCreatedAt(article.getCreatedAt());
         existedArticle.setContent(article.getContent());
         existedArticle.setUpdatedAt(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")));
         if (article.getStatus() == Status.PUBLISHED) {
