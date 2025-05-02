@@ -1,8 +1,10 @@
 package com.example.CMS.Services.Admin;
 
 import com.example.CMS.Common.ConvertToDTO;
+import com.example.CMS.Common.GlobalConstants.Status;
 import com.example.CMS.DTO.ArticleDto;
 import com.example.CMS.DTO.ViewsDto;
+import com.example.CMS.Model.Article;
 import com.example.CMS.Repository.ArticleRepository;
 import com.example.CMS.Repository.ViewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +32,7 @@ public class AdminArticleService {
     );
 
     public List<ArticleDto> index() {
-        return articleRepository.findAll().stream()
+        return articleRepository.findAllByStatusNot(Status.DRAFT).stream()
                 .map(ConvertToDTO::convertToDto)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
@@ -46,7 +48,10 @@ public class AdminArticleService {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
-
+    public ArticleDto detail(Long id){
+        Article article = articleRepository.getReferenceById(id);
+        return convertToDto(article);
+    }
     // Cleanly shutdown thread pool
     public void shutdown() {
         executorService.shutdown();

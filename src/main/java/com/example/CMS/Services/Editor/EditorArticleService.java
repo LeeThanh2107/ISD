@@ -57,15 +57,14 @@ public class EditorArticleService {
         } else {
             throw new SecurityException("No authenticated user found");
         }
-
         existedArticle.setTitle(article.getTitle());
         existedArticle.setAbstract(article.getAbstract());
         existedArticle.setCreatedAt(article.getCreatedAt());
         existedArticle.setContent(article.getContent());
         existedArticle.setUpdatedAt(LocalDateTime.now());
-
         if (article.getStatus() == Status.PUBLISHED) {
             existedArticle.setStatus(Status.PUBLISHED);
+            existedArticle.setPublishedAt(LocalDateTime.now());
         } else if (article.getStatus() == Status.REJECTED) {
             existedArticle.setStatus(Status.REJECTED);
         }

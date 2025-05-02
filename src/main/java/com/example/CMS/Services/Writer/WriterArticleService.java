@@ -145,6 +145,7 @@ public class WriterArticleService {
             newArticle.setTitle(article.getTitle());
             newArticle.setAbstract(article.getAbstract());
             newArticle.setContent(article.getContent());
+            newArticle.setCreatedAt(LocalDateTime.now());
             newArticle.setSendToEditorAt(LocalDateTime.now());
             newArticle.setStatus(Status.REQUEST_REVIEW);
             articleRepository.save(newArticle);

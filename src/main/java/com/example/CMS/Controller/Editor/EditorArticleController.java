@@ -48,7 +48,7 @@ public class EditorArticleController {
           String result = reviewsService.create(reviewRequest.getArticle(),reviewRequest.getComments());
             return ResponseUtils.success(result);
         }catch(Exception e){
-            return ResponseUtils.error(HttpStatus.INTERNAL_SERVER_ERROR,"Something bad happened!");
+            return ResponseUtils.error(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage());
         }
     }
     public static class IdRequest {

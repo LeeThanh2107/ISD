@@ -7,9 +7,7 @@ import com.example.CMS.Services.Admin.AdminArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,5 +26,14 @@ public class AdminArticleController {
         }catch(Exception e){
             return ResponseUtils.error(HttpStatus.INTERNAL_SERVER_ERROR,"Có gì đó không hay xảy ra!");
         }
+    }
+    @PostMapping("/detail/{id}")
+    public ResponseEntity<?>detail(@PathVariable Long id){
+            try{
+                ArticleDto article = adminArticleService.detail(id);
+                return ResponseUtils.success(article);
+            }catch(Exception e){
+                return ResponseUtils.error(HttpStatus.INTERNAL_SERVER_ERROR,"Có gì đó không hay xảy ra!");
+            }
     }
 }

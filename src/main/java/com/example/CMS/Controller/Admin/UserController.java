@@ -1,20 +1,21 @@
 package com.example.CMS.Controller.Admin;
 
 import com.example.CMS.Common.ResponseUtils;
+import com.example.CMS.DTO.UserDTO;
 import com.example.CMS.Model.User;
 import com.example.CMS.Services.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/admin/user")
@@ -25,7 +26,7 @@ public class UserController {
     @GetMapping("/list")
     public ResponseEntity<?> index(){
         try{
-            List<User> data = userService.index();
+            List<UserDTO> data = userService.getAllUser();
             return ResponseUtils.success(data);
         } catch (Exception e) {
             return ResponseUtils.error(HttpStatus.INTERNAL_SERVER_ERROR,"Something bad happened!");
@@ -44,12 +45,17 @@ public class UserController {
         }
     } 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> delete(@RequestAttribute Long id){
-        try{
-            userService.delete(id);
-            return ResponseUtils.success("Delete successfully!");
-        }catch(Exception e){
-            return ResponseUtils.error(HttpStatus.INTERNAL_SERVER_ERROR,"Something bad happened!");
+    public ResponseEntity<?> delete(@PathVariable Long id){
+        try {
+            userService.delete(id); // Service now handles the selective logic
+            return ResponseEntity.noContent().build(); // Return HTTP 204 No Content
+        } catch (EntityNotFoundException e) {
+            // Handle appropriately (e.g., using @ControllerAdvice or return directly)
+            return ResponseEntity.notFound().build(); // Simple 404
+        } catch (Exception e) {
+            // Log the full exception for server issues
+            // log.error("Error deleting user with id {}: {}", id, e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Simple 500
         }
     }
     @PostMapping("/store")
@@ -73,7 +79,22 @@ public class UserController {
         }
     }
 
-
+    @PutMapping("/edit-account")
+    public ResponseEntity<?> edit(@RequestBody User user){
+        try{
+            Optional<User> userEdit = userService.findByUsername(user.getUsername());
+            // Lưu user vào database
+            if(userEdit.isPresent()){
+                userEdit.get().setName(user.getName());
+                userEdit.get().setEmail(user.getEmail());
+                userEdit.get().setRole(user.getRole());
+                userService.store(userEdit.get());
+            }
+            return ResponseUtils.success("Edit successfully");
+        }catch(Exception e){
+            return ResponseUtils.error(HttpStatus.INTERNAL_SERVER_ERROR,"Something bad happened!");
+        }
+    }
     // Phương thức để tạo mật khẩu ngẫu nhiên
     private String generateRandomPassword(int length) {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
