@@ -58,7 +58,7 @@ public class EditorArticleService {
         } else {
             throw new SecurityException("No authenticated user found");
         }
-        existedArticle.setTitle(article.getTitle());
+         existedArticle.setTitle(article.getTitle());
         existedArticle.setAbstract(article.getAbstract());
         existedArticle.setContent(article.getContent());
         existedArticle.setUpdatedAt(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")));
